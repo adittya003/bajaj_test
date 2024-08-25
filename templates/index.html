@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Frontend</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2em;
+            color: #007BFF;
+        }
+        section {
+            margin-bottom: 30px;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #007BFF;
+        }
+        label {
+            font-size: 1em;
+            margin-bottom: 8px;
+            display: block;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        pre {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.9em;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>API Frontend</h1>
+
+        <section>
+            <h2>POST to /bfhl</h2>
+            <label for="dataInput">Enter data (comma-separated):</label>
+            <input type="text" id="dataInput" placeholder="e.g., 1, 2, a, b, 3">
+            <button onclick="postData()">Submit</button>
+            <pre id="postResult"></pre>
+        </section>
+
+        <section>
+            <h2>GET from /bfhl1</h2>
+            <button onclick="getOperationCode()">Get Operation Code</button>
+            <pre id="getResult"></pre>
+        </section>
+    </div>
+
+    <script>
+        async function postData() {
+            const input = document.getElementById('dataInput').value.split(',').map(item => item.trim());
+            const payload = { data: input };
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/bfhl', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+                document.getElementById('postResult').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('postResult').textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function getOperationCode() {
+            try {
+                const response = await fetch('http://127.0.0.1:5000/bfhl1');
+                const result = await response.json();
+                document.getElementById('getResult').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('getResult').textContent = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
